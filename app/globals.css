@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+/* =========================================
+   VAWAU® BRAND SYSTEM
+========================================= */
+:root {
+  --font-body: 'Montserrat', sans-serif;
+  --font-title: 'Saira Stencil One', sans-serif;
+
+  --primary: #183059;
+  --secondary: #273983;
+  --accent: #009aa5;
+}
+
+/* =========================================
+   RESET TIPOGRAFÍA GLOBAL (CLAVE)
+========================================= */
+* {
+  font-family: var(--font-body);
+}
+
+/* =========================================
+   TITULOS SIEMPRE CON MARCA
+========================================= */
+h1, h2, h3, h4 {
+  font-family: var(--font-title) !important;
+  letter-spacing: 1px;
+  color: var(--primary);
+}
+
+/* =========================================
+   BASE
+========================================= */
+body {
+  background: #ffffff;
+  color: #111827;
+}
