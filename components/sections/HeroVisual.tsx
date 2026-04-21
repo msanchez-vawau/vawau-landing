@@ -8,14 +8,14 @@ export default function HeroVisual() {
 
       {/* IMAGE */}
       <Image
-  src="/hogar-feliz2.png"
-  alt="Hogar funcionando"
-  fill
-  priority
-  quality={75}
-  sizes="100vw"
-  className="object-cover object-[center_30%] md:object-[center_20%]"
-/>
+        src="/hogar-feliz2.png"
+        alt="Hogar funcionando"
+        fill
+        priority
+        quality={75}
+        sizes="100vw"
+        className="object-cover object-[center_30%] md:object-[center_20%]"
+      />
 
       {/* LOGO */}
       <div className="absolute top-8 left-1/2 -translate-x-1/2 z-20">
@@ -46,9 +46,10 @@ export default function HeroVisual() {
           Servicio claro, rápido y con garantía real.
         </p>
 
-        {/* CTA */}
+        {/* CTA WHATSAPP */}
         <a
           href="https://wa.me/50685300201?text=Hola,%20necesito%20reparar%20un%20electrodoméstico.%20¿Me%20pueden%20ayudar?"
+          onClick={() => window.trackEvent("whatsapp_click")}
           className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-xl font-semibold text-base md:text-lg shadow-xl transition"
         >
           Escribinos ahora por WhatsApp
@@ -61,6 +62,7 @@ export default function HeroVisual() {
             href="https://www.facebook.com/Stvawau"
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => window.trackEvent("facebook_click")}
             className="hover:text-white transition"
           >
             Facebook
@@ -70,6 +72,7 @@ export default function HeroVisual() {
             href="https://www.instagram.com/stvawau"
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => window.trackEvent("instagram_click")}
             className="hover:text-white transition"
           >
             Instagram
@@ -79,6 +82,7 @@ export default function HeroVisual() {
             href="https://app.vawau.com"
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => window.trackEvent("platform_click")}
             className="hover:text-white transition"
           >
             Plataforma
