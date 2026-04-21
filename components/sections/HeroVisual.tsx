@@ -8,12 +8,14 @@ export default function HeroVisual() {
 
       {/* IMAGE */}
       <Image
-        src="/hogar-feliz2.png"
-        alt="Hogar funcionando"
-        fill
-        priority
-        className="object-cover object-[center_30%] md:object-[center_20%]"
-      />
+  src="/hogar-feliz2.png"
+  alt="Hogar funcionando"
+  fill
+  priority
+  quality={75}
+  sizes="100vw"
+  className="object-cover object-[center_30%] md:object-[center_20%]"
+/>
 
       {/* LOGO */}
       <div className="absolute top-8 left-1/2 -translate-x-1/2 z-20">
