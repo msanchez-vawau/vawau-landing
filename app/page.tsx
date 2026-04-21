@@ -8,7 +8,7 @@ import Footer from "../components/sections/Footer"
 
 export default function Home() {
   return (
-    <main className="w-full overflow-x-hidden">
+    <main className="w-full overflow-x-hidden pb-28">
 
       {/* HERO */}
       <HeroVisual />
