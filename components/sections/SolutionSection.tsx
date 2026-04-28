@@ -53,7 +53,7 @@ export default function SolutionSection() {
 <div className="flex justify-center mt-8">
   <a
     href="https://wa.me/50685300201?text=Hola,%20necesito%20reparar%20un%20electrodoméstico.%20¿Me%20pueden%20ayudar?"
-    onClick={() => window.trackEvent("whatsapp_click")}
+    onClick={() => window.trackEvent?.("whatsapp_click")}
     className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-xl font-semibold text-sm md:text-base shadow-xl transition"
   >
     Solicita tu revisión
