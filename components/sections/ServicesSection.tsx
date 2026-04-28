@@ -65,8 +65,6 @@ export default function ServicesSection() {
               {/* CONTENT */}
               <div className="relative z-10 text-white">
 
-                <div className="text-2xl mb-3">{card.icon}</div>
-
                 <h3 className="subtitle font-bold text-lg leading-tight">
                   <span className="block">{card.title1}</span>
                   <span className="block">{card.title2}</span>
