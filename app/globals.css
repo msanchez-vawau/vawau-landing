@@ -4,28 +4,42 @@
    VAWAU® BRAND SYSTEM
 ========================================= */
 :root {
-  --font-body: 'Montserrat', sans-serif;
+  /* TIPOGRAFÍA */
+  --font-body: 'Montserrat', sans-serif; /* Gotham fallback */
   --font-title: 'Saira Stencil One', sans-serif;
 
+  /* COLORES BASE (NO SE APLICAN AUTOMÁTICAMENTE) */
   --primary: #183059;
   --secondary: #273983;
   --accent: #009aa5;
 }
 
 /* =========================================
-   RESET TIPOGRAFÍA GLOBAL (CLAVE)
+   RESET TIPOGRAFÍA GLOBAL
 ========================================= */
 * {
   font-family: var(--font-body);
 }
 
 /* =========================================
-   TITULOS SIEMPRE CON MARCA
+   SISTEMA TIPOGRÁFICO (CLASES)
 ========================================= */
-h1, h2, h3, h4 {
-  font-family: var(--font-title) !important;
+
+/* TITULOS (Brand) */
+.title {
+  font-family: var(--font-title);
   letter-spacing: 1px;
-  color: var(--primary);
+}
+
+/* SUBTITULOS */
+.subtitle {
+  font-family: var(--font-body);
+  letter-spacing: 0.3px;
+}
+
+/* TEXTO NORMAL */
+.body-text {
+  font-family: var(--font-body);
 }
 
 /* =========================================

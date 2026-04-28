@@ -19,7 +19,7 @@ export default function SpareParts() {
           href="https://wa.me/50685300201?text=Hola,%20estoy%20buscando%20un%20repuesto%20para%20un%20electrodoméstico"
           className="inline-block bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg transition"
         >
-          Consultar repuesto por WhatsApp
+          Cotiza tu repuesto
         </a>
 
       </div>

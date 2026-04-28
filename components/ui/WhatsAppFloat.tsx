@@ -10,7 +10,7 @@ export default function WhatsAppFloat() {
     >
       <span className="text-xl">💬</span>
       <span className="hidden sm:block font-semibold">
-        Escribinos ahora por WhatsApp
+        ¡Estamos listos para ayudarte!
       </span>
     </a>
   )

@@ -5,6 +5,9 @@ import SpareParts from "../components/sections/SpareParts"
 import Authority from "../components/sections/Authority"
 import FinalCTA from "../components/sections/FinalCTA"
 import Footer from "../components/sections/Footer"
+import MissionSection from "../components/sections/MissionSection"
+import ServicesSection from "../components/sections/ServicesSection"
+
 
 export default function Home() {
   return (
@@ -19,10 +22,13 @@ export default function Home() {
       {/* SOLUCIÓN */}
       <SolutionSection />
 
-      {/* REPUESTOS (nuevo) */}
-      <SpareParts />
+      {/* MISION */}
+      <MissionSection /> 
 
-      {/* AUTORIDAD */}
+       {/* SERVICIO */}
+      <ServicesSection />
+
+     {/* AUTORIDAD */}
       <Authority />
 
       {/* CTA FINAL */}

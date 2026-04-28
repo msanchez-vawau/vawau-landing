@@ -9,9 +9,9 @@ export default function Authority() {
       <div className="max-w-6xl mx-auto text-center">
 
         {/* TITLE */}
-         <h2 className="text-3xl md:text-5xl font-bold">
-          Centro de servicio autorizado
-        </h2>
+       <h3 className="title !text-[#009aa5] text-3xl sm:text-5xl md:text-6xl font-bold">
+  Centro de Servicio Autorizado
+</h3>
 
         <p className="text-gray-600 text-lg max-w-2xl mx-auto mb-12">
           Técnicos certificados, repuestos originales y respaldo real en cada servicio.
@@ -19,10 +19,7 @@ export default function Authority() {
 
         {/* AUTORIZADAS */}
         <div className="mb-16">
-          <p className="text-sm text-gray-500 mb-8">
-            Marcas autorizadas
-          </p>
-
+          
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-y-10 gap-x-8 justify-items-center items-center">
 
             <Image src="/brands/electrolux.png" alt="Electrolux" width={140} height={60} />
@@ -43,7 +40,7 @@ export default function Authority() {
 
   {/* EXPERIENCIA */}
 <div>
-  <p className="text-sm text-gray-400 mb-8">
+  <p className="text-gray-600 text-lg max-w-2xl mx-auto mb-12">
     Experiencia con otras marcas
   </p>
 
