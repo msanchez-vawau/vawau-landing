@@ -7,7 +7,7 @@ export default function Footer() {
 
       {/* COPYRIGHT */}
       <p className="mb-6 text-sm">
-        © {new Date().getFullYear()} Vawau® — Servicio técnico profesional
+        © {new Date().getFullYear()} VAWAU®— Servicio técnico profesional
       </p>
 
       {/* CONTACTO NUEVO */}

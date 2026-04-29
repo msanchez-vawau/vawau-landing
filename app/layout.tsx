@@ -16,7 +16,7 @@ const saira = Saira_Stencil_One({
 })
 
 export const metadata: Metadata = {
-  title: "Vawau®",
+  title: "VAWAU®",
   description: "Reparación de electrodomésticos a domicilio",
 }
 
