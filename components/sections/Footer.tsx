@@ -3,12 +3,15 @@ import { Wrench } from "lucide-react"
 
 export default function Footer() {
   return (
-    <footer className="bg-black text-white py-10 text-center">
+    <footer className="border-t border-white/10 bg-black text-white py-10 text-center">
 
       {/* COPYRIGHT */}
       <p className="mb-6 text-sm">
-        © {new Date().getFullYear()} VAWAU®— Servicio técnico profesional
+        © {new Date().getFullYear()} Soluciones Técnicas Vawau S.A. — VAWAU®
       </p>
+      <p className="text-white/40 text-xs mb-6">
+  Todos los derechos reservados.
+</p>
 
       {/* CONTACTO NUEVO */}
       <div className="flex flex-col items-center gap-2 text-white/80 text-sm mb-8">
