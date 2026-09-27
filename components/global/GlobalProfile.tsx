@@ -14,6 +14,8 @@ import {
   ShieldCheck,
   Truck,
   Wrench,
+  Mail,
+  MessageCircle,
 } from "lucide-react"
 
 type Language = "en" | "zh" | "es"
@@ -86,9 +88,16 @@ const copy = {
     partnerTitle: "Built to adapt to your after-sales model.",
     partnerBody:
       "Every manufacturer operates differently. VAWAU can align workflows, documentation, service levels and operational processes to the requirements of each brand.",
-    ctaTitle: "Entering the Costa Rican market?",
-    ctaBody: "Let’s discuss how VAWAU can support your brand after the sale.",
-    email: "Email VAWAU",
+    ctaTitle: "Let’s discuss your after-sales operation in Costa Rica.",
+    ctaBody: "Talk directly with our Executive Director.",
+    executiveName: "Marco Sanchez Zeledon",
+    executiveRole: "Executive Director · VAWAU",
+    executiveFocus: "International Business & Manufacturer Partnerships",
+    emailMarco: "Email Marco",
+    whatsapp: "WhatsApp",
+    wechat: "WeChat · Marco Sanchez Zeledon",
+    wechatNote: "Connect directly with Marco on WeChat.",
+    general: "General Inquiries",
     website: "Visit vawau.com",
     footer: "Soluciones Técnicas Vawau S.A. · San José, Costa Rica",
   },
@@ -150,9 +159,16 @@ const copy = {
     partnerKicker: "为什么选择VAWAU",
     partnerTitle: "适配您的售后运营模式。",
     partnerBody: "不同制造商拥有不同的运营要求。VAWAU可根据各品牌需求调整工作流程、文件标准、服务水平及运营流程。",
-    ctaTitle: "计划进入哥斯达黎加市场？",
-    ctaBody: "欢迎与我们交流VAWAU如何为您的品牌提供本地售后支持。",
-    email: "联系VAWAU",
+    ctaTitle: "让我们一起探讨您在哥斯达黎加的售后服务运营。",
+    ctaBody: "欢迎直接与VAWAU执行董事沟通。",
+    executiveName: "Marco Sanchez Zeledon",
+    executiveRole: "执行董事 · VAWAU",
+    executiveFocus: "国际业务与制造商合作",
+    emailMarco: "联系Marco",
+    whatsapp: "WhatsApp",
+    wechat: "微信 · Marco Sanchez Zeledon",
+    wechatNote: "可通过微信直接联系 Marco。",
+    general: "一般咨询",
     website: "访问 vawau.com",
     footer: "Soluciones Técnicas Vawau S.A. · 哥斯达黎加圣何塞",
   },
@@ -216,9 +232,16 @@ const copy = {
     partnerKicker: "POR QUÉ VAWAU",
     partnerTitle: "Diseñado para adaptarse a su modelo de postventa.",
     partnerBody: "Cada fabricante opera de manera diferente. VAWAU puede alinear flujos, documentación, niveles de servicio y procesos operativos con los requerimientos de cada marca.",
-    ctaTitle: "¿Planea entrar al mercado de Costa Rica?",
-    ctaBody: "Conversemos sobre cómo VAWAU puede apoyar a su marca después de la venta.",
-    email: "Contactar a VAWAU",
+    ctaTitle: "Conversemos sobre su operación de posventa en Costa Rica.",
+    ctaBody: "Hable directamente con nuestro Director Ejecutivo.",
+    executiveName: "Marco Sanchez Zeledon",
+    executiveRole: "Director Ejecutivo · VAWAU",
+    executiveFocus: "Negocios Internacionales y Alianzas con Fabricantes",
+    emailMarco: "Contactar a Marco",
+    whatsapp: "WhatsApp",
+    wechat: "WeChat · Marco Sanchez Zeledon",
+    wechatNote: "Conecta directamente con Marco por WeChat.",
+    general: "Consultas generales",
     website: "Visitar vawau.com",
     footer: "Soluciones Técnicas Vawau S.A. · San José, Costa Rica",
   },
@@ -280,7 +303,7 @@ export default function GlobalProfile() {
             <p className="mt-6 max-w-2xl text-base leading-7 text-white/80 sm:mt-7 sm:text-lg sm:leading-8 md:text-xl">{t.intro}</p>
             <div className="mt-8 flex flex-col gap-3 sm:mt-9 sm:flex-row sm:flex-wrap">
               <a href="#capabilities" className="inline-flex items-center justify-center gap-2 rounded-full bg-[#009aa5] px-6 py-3.5 font-bold text-white transition hover:bg-[#208790]">{t.primary}<ArrowRight size={18} /></a>
-              <a href="mailto:info@vawau.com" className="inline-flex justify-center rounded-full border border-white/30 bg-white/10 px-6 py-3.5 font-bold text-white transition hover:bg-white/20">{t.contact}</a>
+              <a href="mailto:msanchez@vawau.com" className="inline-flex justify-center rounded-full border border-white/30 bg-white/10 px-6 py-3.5 font-bold text-white transition hover:bg-white/20">{t.contact}</a>
             </div>
             <p className="mt-7 flex items-center gap-2 text-sm font-semibold text-white/65"><CheckCircle2 size={17} className="shrink-0 text-[#63d3d9]" />{t.proof}</p>
           </div>
@@ -349,7 +372,51 @@ export default function GlobalProfile() {
 
       <section className="mx-auto max-w-7xl px-5 pb-20 sm:pb-24 lg:px-8"><div className="rounded-[2rem] border border-slate-200 p-7 sm:p-8 md:p-12"><p className="text-xs font-extrabold tracking-[.16em] text-[#009aa5] sm:text-sm sm:tracking-[.18em]">{t.partnerKicker}</p><h2 className="mt-4 max-w-3xl text-3xl font-extrabold text-[#183059] sm:text-4xl md:text-5xl">{t.partnerTitle}</h2><p className="mt-5 max-w-3xl text-base leading-7 text-slate-600 sm:text-lg sm:leading-8">{t.partnerBody}</p><div className="mt-8 flex flex-wrap gap-4 text-sm font-bold text-[#183059]">{[PackageCheck, Truck, GraduationCap, Network].map((Icon,i)=><span key={i} className="flex h-12 w-12 items-center justify-center rounded-full bg-[#e8f7f7] text-[#009aa5]"><Icon size={21}/></span>)}</div></div></section>
 
-      <section className="bg-[#009aa5] px-5 py-16 text-white sm:py-20"><div className="mx-auto max-w-4xl text-center"><h2 className="text-3xl font-black sm:text-4xl md:text-5xl">{t.ctaTitle}</h2><p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-white/85 sm:text-lg sm:leading-8">{t.ctaBody}</p><div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap"><a href="mailto:info@vawau.com" className="rounded-full bg-white px-6 py-3.5 font-extrabold text-[#183059]">{t.email}</a><a href="https://www.vawau.com" className="rounded-full border border-white/40 px-6 py-3.5 font-extrabold text-white">{t.website}</a></div></div></section>
+      <section className="bg-[#009aa5] px-5 py-16 text-white sm:py-20">
+        <div className="mx-auto max-w-6xl">
+          <div className="text-center">
+            <h2 className="text-3xl font-black sm:text-4xl md:text-5xl">{t.ctaTitle}</h2>
+            <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-white/85 sm:text-lg sm:leading-8">{t.ctaBody}</p>
+          </div>
+
+          <div className="mx-auto mt-9 overflow-hidden rounded-[2rem] bg-white text-[#183059] shadow-[0_24px_70px_rgba(7,22,44,.16)]">
+            <div className="grid lg:grid-cols-[1.25fr_.75fr]">
+              <div className="p-6 sm:p-8 md:p-10">
+                <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+                  <div>
+                    <p className="text-xs font-extrabold uppercase tracking-[.16em] text-[#009aa5]">{t.executiveRole}</p>
+                    <p className="mt-2 text-2xl font-black sm:text-3xl">{t.executiveName}</p>
+                    <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500 sm:text-base">{t.executiveFocus}</p>
+                  </div>
+                  <div className="shrink-0 rounded-full bg-[#e8f7f7] px-4 py-2 text-xs font-extrabold text-[#009aa5]">+506 8358-2995</div>
+                </div>
+
+                <div className="mt-7 grid gap-3 sm:grid-cols-2">
+                  <a href="mailto:msanchez@vawau.com" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#183059] px-5 py-3.5 font-extrabold text-white transition hover:bg-[#102545]"><Mail size={18} />{t.emailMarco}</a>
+                  <a href="https://wa.me/50683582995?text=Hello%20Marco%2C%20I%20found%20VAWAU%20through%20your%20international%20profile%20and%20would%20like%20to%20discuss%20a%20potential%20business%20partnership." target="_blank" rel="noreferrer" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border-2 border-[#183059]/15 px-5 py-3.5 font-extrabold text-[#183059] transition hover:border-[#009aa5] hover:text-[#009aa5]"><MessageCircle size={18} />{t.whatsapp}</a>
+                </div>
+              </div>
+
+              <div className="grid border-t border-slate-200 lg:border-l lg:border-t-0 sm:grid-cols-2 lg:grid-cols-1">
+                <div className="flex items-center gap-5 p-6 sm:p-7">
+                  <div className="shrink-0 rounded-2xl border border-slate-200 bg-white p-2 shadow-sm">
+                    <Image src="/global/wechat-qr.png" alt="WeChat QR code for Marco Sanchez Zeledon" width={112} height={112} className="h-28 w-28" />
+                  </div>
+                  <div>
+                    <p className="text-lg font-black">{t.wechat}</p>
+                    <p className="mt-2 text-xs font-semibold leading-5 text-slate-500">{t.wechatNote}</p>
+                  </div>
+                </div>
+                <div className="flex flex-col justify-center border-t border-slate-200 p-6 sm:p-7 lg:border-t">
+                  <p className="text-lg font-black">{t.general}</p>
+                  <a href="mailto:info@vawau.com" className="mt-2 w-fit font-bold text-[#009aa5] underline decoration-[#009aa5]/30 underline-offset-4">info@vawau.com</a>
+                  <a href="https://www.vawau.com" className="mt-5 inline-flex min-h-11 items-center justify-center rounded-full border-2 border-[#183059]/15 px-5 py-3 text-sm font-extrabold text-[#183059] transition hover:border-[#009aa5] hover:text-[#009aa5]">{t.website}</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <footer className="bg-[#07162c] px-5 py-10 text-white"><div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-5 text-center md:flex-row md:text-left"><Image src="/logo-horizontal.png" alt="VAWAU" width={150} height={48} className="brightness-0 invert" /><div><p className="text-sm text-white/60">{t.footer}</p><p className="mt-1 text-sm font-semibold">+506 4000-2829 · info@vawau.com · www.vawau.com</p></div><Link href="/" className="text-sm font-bold text-[#63d3d9]">{t.back} →</Link></div></footer>
     </main>
