@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
-import { Montserrat, Saira_Stencil_One } from "next/font/google"
+import { Montserrat } from "next/font/google"
+import localFont from "next/font/local"
 import Script from "next/script"
 import "./globals.css"
 import WhatsAppFloat from "@/components/ui/WhatsAppFloat"
@@ -9,8 +10,8 @@ const montserrat = Montserrat({
   variable: "--font-body",
 })
 
-const saira = Saira_Stencil_One({
-  subsets: ["latin"],
+const saira = localFont({
+  src: "./fonts/SairaStencilOne-Regular.ttf",
   weight: "400",
   variable: "--font-title",
 })

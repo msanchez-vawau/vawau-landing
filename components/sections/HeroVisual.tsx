@@ -1,21 +1,21 @@
 "use client"
 
 import Image from "next/image"
+import banner from "@/public/banner.jpg"
 
 export default function HeroVisual() {
   return (
-    <section className="relative w-full h-[520px] md:h-[650px] overflow-hidden px-6 md:px-12">
+    <section className="w-full">
 
       {/* IMAGE */}
   
 <Image
-  src="/banner.jpg"
+  src={banner}
   alt="Centro de servicio autorizado"
-  fill
   priority
   quality={100}
   sizes="100vw"
-  className="object-cover object-[center_40%]"
+  className="block h-auto w-full"
 />
 
 

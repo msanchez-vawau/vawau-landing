@@ -4,9 +4,7 @@
    VAWAU®BRAND SYSTEM
 ========================================= */
 :root {
-  /* TIPOGRAFÍA */
-  --font-body: 'Montserrat', sans-serif; /* Gotham fallback */
-  --font-title: 'Saira Stencil One', sans-serif;
+  /* Las variables tipográficas las define next/font en el layout. */
 
   /* COLORES BASE (NO SE APLICAN AUTOMÁTICAMENTE) */
   --primary: #183059;

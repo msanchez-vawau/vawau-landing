@@ -7,6 +7,7 @@ import FinalCTA from "../components/sections/FinalCTA"
 import Footer from "../components/sections/Footer"
 import MissionSection from "../components/sections/MissionSection"
 import ServicesSection from "../components/sections/ServicesSection"
+import InstallationEntry from "../components/sections/InstallationEntry"
 
 
 export default function Home() {
@@ -15,6 +16,7 @@ export default function Home() {
 
       {/* HERO */}
       <HeroVisual />
+      <InstallationEntry />
 
       {/* PROBLEMA */}
       <FailureSection />
