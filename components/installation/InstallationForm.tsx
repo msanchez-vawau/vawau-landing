@@ -4,12 +4,14 @@ import { useRef, useState, type FormEvent, type InputHTMLAttributes, type ReactN
 import { brands, equipmentTypes, provinces, preparationOptions, MAX_FILE_BYTES, MAX_TOTAL_BYTES } from "@/lib/installation-options";
 import { TERMS_VERSION } from "@/lib/installation-terms";
 import Link from "next/link";
+import { getCantons, getDistricts } from "@/lib/installation-locations";
+import LocationInput from "./LocationInput";
 
 function Field({ label, name, required = false, wide = false, hint, ...props }: InputHTMLAttributes<HTMLInputElement> & { label: string; name: string; wide?: boolean; hint?: string }) {
   return <label className={`installation-field ${wide ? "wide" : ""}`}><span>{label}{required ? " *" : " (opcional)"}</span><input name={name} required={required} maxLength={250} {...props} />{hint && <small>{hint}</small>}</label>;
 }
-function Select({ label, name, options, onChange }: { label: string; name: string; options: string[]; onChange?: (value: string) => void }) {
-  return <label className="installation-field"><span>{label} *</span><select name={name} required defaultValue="" onChange={e => onChange?.(e.target.value)}><option value="" disabled>Seleccioná una opción</option>{options.map(o => <option key={o}>{o}</option>)}</select></label>;
+function Select({ label, name, options, onChange, value, disabled = false, placeholder = "Seleccioná una opción" }: { label: string; name: string; options: string[]; onChange?: (value: string) => void; value?: string; disabled?: boolean; placeholder?: string }) {
+  return <label className="installation-field"><span>{label} *</span><select name={name} required disabled={disabled} {...(value === undefined ? { defaultValue: "" } : { value })} onChange={e => onChange?.(e.target.value)}><option value="" disabled>{placeholder}</option>{options.map(o => <option key={o}>{o}</option>)}</select></label>;
 }
 function Group({ number, title, children }: { number: string; title: string; children: ReactNode }) {
   return <fieldset><legend><b>{number}</b>{title}</legend><div className="installation-field-grid">{children}</div></fieldset>;
@@ -19,6 +21,9 @@ function Upload({ label, name, required = false, pdf = false, multiple = false }
 }
 
 export default function InstallationForm() {
+  const [province, setProvince] = useState("");
+  const [canton, setCanton] = useState("");
+  const [district, setDistrict] = useState("");
   const [equipment, setEquipment] = useState("");
   const [onsite, setOnsite] = useState("");
   const [prepared, setPrepared] = useState("");
@@ -99,12 +104,12 @@ export default function InstallationForm() {
         <Field label="Correo electrónico" name="email" type="email" required wide autoComplete="email" />
       </Group>
       <Group number="02" title="Lugar de instalación">
-        <Select label="Provincia" name="province" options={provinces} />
-        <Field label="Cantón" name="canton" required autoComplete="address-level2" />
-        <Field label="Distrito" name="district" required />
+        <Select label="Provincia" name="province" options={provinces} value={province} onChange={value => { setProvince(value); setCanton(""); setDistrict(""); }} />
+        <Select label="Cantón" name="canton" options={getCantons(province)} value={canton} disabled={!province} placeholder={province ? "Seleccioná un cantón" : "Primero seleccioná una provincia"} onChange={value => { setCanton(value); setDistrict(""); }} />
+        <Select label="Distrito" name="district" options={getDistricts(province, canton)} value={district} disabled={!canton} placeholder={canton ? "Seleccioná un distrito" : "Primero seleccioná un cantón"} onChange={setDistrict} />
         <label className="installation-field wide"><span>Dirección exacta *</span><textarea name="address" required maxLength={2000} autoComplete="street-address" placeholder="Barrio, calle, número de casa y señas para llegar." /></label>
         <Field label="Referencia adicional" name="addressReference" wide />
-        <Field label="Ubicación de Google Maps" name="mapsUrl" type="url" wide placeholder="https://maps.app.goo.gl/…" hint="Pegá el enlace de la ubicación donde instalaremos el equipo." />
+        <LocationInput />
       </Group>
       <Group number="03" title="Información del equipo">
         <Select label="Marca" name="brand" options={brands} />

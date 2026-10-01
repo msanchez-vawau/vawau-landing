@@ -1,5 +1,6 @@
 import { brands, equipmentTypes, provinces, preparationOptions, MAX_FILE_BYTES, MAX_TOTAL_BYTES } from "./installation-options";
 import { TERMS_VERSION } from "./installation-terms";
+import { isValidLocation } from "./installation-locations";
 
 export class ValidationError extends Error {}
 export type Attachment = { field: string; name: string; type: string; bytes: Buffer };
@@ -18,6 +19,7 @@ export function validateInstallationFields(form: FormData) {
     if (!options.includes(fields[name])) throw new ValidationError("Seleccioná una opción válida en " + name + ".");
   }
   if (fields.equipmentType === "Otro" && !fields.otherEquipment) throw new ValidationError("Especificá el tipo de equipo.");
+  if (!isValidLocation(fields.province, fields.canton, fields.district)) throw new ValidationError("Seleccioná un cantón y un distrito correspondientes a la provincia indicada.");
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email)) throw new ValidationError("Revisá el correo electrónico.");
   for (const key of ["phone", "alternatePhone", "otherPhone"]) {
     if (fields[key] && (!/^[+\d ()-]{8,25}$/.test(fields[key]) || fields[key].replace(/\D/g, "").length < 8)) throw new ValidationError("Revisá los números de teléfono.");

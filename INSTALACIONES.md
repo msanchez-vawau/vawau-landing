@@ -35,7 +35,7 @@ Las tablas y funciones no son accesibles para anon/authenticated. La API no ofre
 - Límite persistente de 10 preparaciones por IP/hora. Se guarda un hash de la IP, no la dirección en claro; los contadores antiguos se depuran al ingresar nuevas solicitudes.
 - Una carga abandonada puede dejar objetos privados sin expediente. No se borran automáticamente. Para limpieza operativa, identificar rutas no referenciadas en installation_attachments, esperar al menos 24 horas y usar la API de Storage; nunca borrar filas directamente de storage.objects.
 - La validación de firma no sustituye análisis antimalware.
-- Cantón y distrito se conservan como texto libre.
+- Provincia, cantón y distrito son listas dependientes, con catálogo local IGN 2026 y validación de la combinación en el servidor. Ver UBICACIONES.md.
 
 ## Desarrollo y pruebas
 

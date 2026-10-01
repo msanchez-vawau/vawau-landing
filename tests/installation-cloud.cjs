@@ -10,11 +10,12 @@ const modules = new Map();
 function load(filename) {
   if (modules.has(filename)) return modules.get(filename).exports;
   const module = { exports: {} }; modules.set(filename, module);
-  const source = ts.transpileModule(fs.readFileSync(filename, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
+  const source = ts.transpileModule(fs.readFileSync(filename, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true } }).outputText;
   const nativeRequire = createRequire(filename);
   new Function('require', 'module', 'exports', source)((id) => {
     if (id === 'server-only') return {};
     if (id.startsWith('@/')) return load(path.join(root, id.slice(2) + '.ts'));
+    if (id.endsWith('.json')) return nativeRequire(id);
     if (id.startsWith('.')) return load(path.resolve(path.dirname(filename), id + '.ts'));
     return nativeRequire(id);
   }, module, module.exports);
@@ -26,7 +27,7 @@ const { POST } = load(path.join(root, 'app/api/instalaciones/route.ts'));
 const { TERMS_VERSION } = load(path.join(root, 'lib/installation-terms.ts'));
 const bytes = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jq4kAAAAASUVORK5CYII=', 'base64');
 const sha256 = b => createHash('sha256').update(b).digest('hex');
-const fields = { fullName: 'Prueba', identification: '123456789', phone: '88888888', email: 'prueba@example.com', province: 'San José', canton: 'Central', district: 'Carmen', address: 'Dirección ficticia', brand: 'Electrolux', equipmentType: 'Lavadora', model: 'TEST', serial: 'TEST', store: 'Prueba', purchaseDate: '2026-01-01', onsite: 'Sí', prepared: 'Sí', source: 'qr', acceptTerms: 'on', acceptData: 'on', termsVersion: TERMS_VERSION, requestToken: randomUUID() };
+const fields = { fullName: 'Prueba', identification: '123456789', phone: '88888888', email: 'prueba@example.com', province: 'San José', canton: 'San José', district: 'Carmen', address: 'Dirección ficticia', brand: 'Electrolux', equipmentType: 'Lavadora', model: 'TEST', serial: 'TEST', store: 'Prueba', purchaseDate: '2026-01-01', onsite: 'Sí', prepared: 'Sí', source: 'qr', acceptTerms: 'on', acceptData: 'on', termsVersion: TERMS_VERSION, requestToken: randomUUID() };
 const manifest = ['labelPhoto', 'invoice'].map(field => ({ field, name: field + '.png', type: 'image/png', size: bytes.length, sha256: sha256(bytes) }));
 const stored = new Map(); const records = new Map(); let quota = true; let databaseDown = false;
 global.fetch = async (url, options = {}) => {
@@ -51,6 +52,21 @@ async function api(body, origin = 'https://landing.test') {
 async function prepare(overrides = {}) { return api({ action: 'prepare', fields, files: manifest, ...overrides }); }
 function upload(prepared, content = bytes) { for (const item of prepared.body.uploads) stored.set(new URL(item.url).pathname.split('/installation-documents/')[1], content); }
 (async () => {
+  const locations = load(path.join(root, 'lib/installation-locations.ts'));
+  const catalogue = require('../lib/costa-rica-locations.json');
+  assert.equal(catalogue.length, 7);
+  assert.equal(catalogue.flatMap(p => p.cantons).length, 84);
+  const districts = catalogue.flatMap(p => p.cantons.flatMap(c => c.districts));
+  assert.equal(districts.length, 494);
+  assert.equal(new Set(districts.map(d => d.code)).size, 494);
+  assert.ok(locations.getCantons('Puntarenas').includes('Monteverde'));
+  assert.ok(locations.getDistricts('Limón', 'Guácimo').includes('Duacarí'));
+  assert.ok(locations.isValidLocation('San José', 'Goicoechea', 'Guadalupe'));
+  assert.ok(!locations.isValidLocation('Heredia', 'Goicoechea', 'Guadalupe'));
+  assert.deepEqual(locations.getCantons(''), []);
+  assert.deepEqual(locations.getDistricts('San José', ''), []);
+  assert.equal((await prepare({ fields: { ...fields, canton: 'Goicoechea', district: 'Carmen' } })).status, 400);
+  assert.equal((await prepare({ fields: { ...fields, district: '' } })).status, 400);
   assert.equal((await prepare({ fields: { ...fields, acceptData: '' } })).status, 400);
   assert.equal((await prepare({ fields: { ...fields, purchaseDate: '2999-01-01' } })).status, 400);
   assert.equal((await prepare({ files: manifest.slice(0, 1) })).status, 400);

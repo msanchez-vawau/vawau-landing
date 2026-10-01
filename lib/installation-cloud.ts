@@ -57,7 +57,13 @@ export async function prepareInstallation(body: Record<string, unknown>, clientI
   });
   if (!counts.labelPhoto || !counts.invoice || files.reduce((sum, f) => sum + f.size, 0) > MAX_TOTAL_BYTES) throw new ValidationError("Adjuntá la etiqueta y la factura, con un máximo total de 20 MB.");
   const quota = await cloud("/rest/v1/rpc/installation_upload_quota", { method: "POST", body: JSON.stringify({ p_key: createHmac("sha256", config().key).update(clientIp).digest("hex") }) });
-  if (!quota.ok) throw new CloudError("No pudimos habilitar la carga. Intentá nuevamente.");
+  if (!quota.ok) {
+    const detail = await quota.json().catch(() => ({}));
+    // Solo estado y código técnico; nunca claves, datos del formulario o texto del proveedor.
+    const code = typeof detail.code === "string" && /^[A-Z0-9_]{1,32}$/.test(detail.code) ? detail.code : "unknown";
+    console.error("installation_quota_failed", { status: quota.status, code });
+    throw new CloudError(`No pudimos habilitar la carga. Contactanos al 4000-2829 e indicá el código CARGA-${quota.status}.`);
+  }
   if (await quota.json() !== true) throw new CloudError("Alcanzaste el límite de intentos. Intentá de nuevo dentro de una hora.", 429);
   const hash = digest(JSON.stringify({ fields, terms: TERMS_VERSION, files: files.map(({ field, name, type, size, sha256, slot }) => ({ field, name, type, size, sha256, slot })) }));
   const uploads = [];

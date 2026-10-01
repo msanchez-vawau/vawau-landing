@@ -53,3 +53,4 @@
   .installation-benefit h2 { font-size: 22px; }
   .installation-brands img { height: 55px; }
 }
+.installation-location{grid-column:1/-1;min-width:0}.installation-location-button{margin-top:14px;white-space:normal;text-align:center;max-width:100%;line-height:1.5}.installation-location-button:disabled{opacity:.65;cursor:wait}.installation-location-status{font-size:14px;margin-top:10px;color:#526174}.installation-location-status:empty{display:none}.installation-location-map{display:inline-block;margin-top:8px;color:#007e88;text-decoration:underline;text-underline-offset:3px;font-weight:600}

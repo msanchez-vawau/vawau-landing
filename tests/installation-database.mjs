@@ -14,7 +14,7 @@ for (let repeat = 0; repeat < 2; repeat++) {
     await db.exec(await readFile(new URL('../supabase/migrations/' + name, import.meta.url), 'utf8'));
   }
 }
-const fields = { fullName: 'Prueba', identification: '1234', phone: '88888888', email: 'test@example.com', province: 'San José', canton: 'Central', district: 'Carmen', address: 'Prueba', brand: 'Electrolux', equipmentType: 'Lavadora', model: 'TEST', serial: 'TEST', store: 'Test', purchaseDate: '2026-01-01', onsite: 'Sí', prepared: 'Sí', source: 'qr' };
+const fields = { fullName: 'Prueba', identification: '1234', phone: '88888888', email: 'test@example.com', province: 'San José', canton: 'San José', district: 'Carmen', address: 'Prueba', brand: 'Electrolux', equipmentType: 'Lavadora', model: 'TEST', serial: 'TEST', store: 'Test', purchaseDate: '2026-01-01', onsite: 'Sí', prepared: 'Sí', source: 'qr' };
 const token = randomUUID();
 const files = ['labelPhoto', 'invoice'].map(field => ({ field, slot: 1, path: `${token}/test/${field}`, name: 'test.png', type: 'image/png', size: 20, sha256: 'a'.repeat(64) }));
 const call = (hash = 'a'.repeat(64), selected = files, id = token) => db.query('select public.receive_installation($1,$2,$3,$4,$5) as receipt', [id, hash, JSON.stringify(fields), 'v1-2026-09-30', JSON.stringify(selected)]);
