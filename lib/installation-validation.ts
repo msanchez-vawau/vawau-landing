@@ -1,3 +1,4 @@
+import { purchaseDateError } from "./installation-promotion";
 import { brands, equipmentTypes, provinces, preparationOptions, MAX_FILE_BYTES, MAX_TOTAL_BYTES } from "./installation-options";
 import { TERMS_VERSION } from "./installation-terms";
 import { isValidLocation } from "./installation-locations";
@@ -24,9 +25,8 @@ export function validateInstallationFields(form: FormData) {
   for (const key of ["phone", "alternatePhone", "otherPhone"]) {
     if (fields[key] && (!/^[+\d ()-]{8,25}$/.test(fields[key]) || fields[key].replace(/\D/g, "").length < 8)) throw new ValidationError("Revisá los números de teléfono.");
   }
-  const date = fields.purchaseDate;
-  const today = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Costa_Rica" }).format(new Date());
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !Number.isFinite(Date.parse(date)) || new Date(date).toISOString().slice(0, 10) !== date || date > today) throw new ValidationError("Ingresá una fecha de compra válida que no sea futura.");
+  const dateError = purchaseDateError(fields.purchaseDate);
+  if (dateError) throw new ValidationError(dateError);
   if (fields.mapsUrl) {
     try { const url = new URL(fields.mapsUrl); if (url.protocol !== "https:" || !(["maps.app.goo.gl", "goo.gl", "maps.google.com", "www.google.com", "google.com", "www.google.co.cr", "maps.google.co.cr"].includes(url.hostname))) throw new Error(); }
     catch { throw new ValidationError("Ingresá un enlace HTTPS válido de Google Maps."); }
@@ -47,7 +47,7 @@ export async function validateInstallation(form: FormData) {
     const values = form.getAll(field);
     if (values.some(v => typeof v === "string")) throw new ValidationError("Revisá los archivos adjuntos.");
     const files = values.filter((v): v is File => v instanceof File && v.size > 0);
-    if ((["labelPhoto", "invoice"].includes(field) && !files.length) || files.length > max) throw new ValidationError("Adjuntá la etiqueta, el comprobante y hasta 3 fotos del lugar.");
+    if ((["labelPhoto", "invoice"].includes(field) && !files.length) || files.length > max) throw new ValidationError("Adjuntá la foto del modelo y número de serie, el comprobante y hasta 3 fotos del lugar.");
     for (const file of files) {
       if (file.size > MAX_FILE_BYTES) throw new ValidationError("Cada archivo debe pesar como máximo 5 MB.");
       const bytes = Buffer.from(await file.arrayBuffer());

@@ -1,5 +1,6 @@
+import { PROMOTION_NOTICE } from "./installation-promotion";
 // Texto suministrado por VAWAU. Actualizar la versión al modificar condiciones.
-export const TERMS_VERSION = "v1-2026-09-30";
+export const TERMS_VERSION = "v2-2026-10-02";
 export const termsIntroduction = [
   "VAWAU® es responsable de coordinar y ejecutar el servicio de instalación de los equipos Electrolux y Frigidaire comercializados con este beneficio de instalación.",
   "Para solicitar el servicio, el cliente deberá completar el formulario correspondiente, proporcionar la información requerida y aceptar las presentes condiciones.",
@@ -34,4 +35,9 @@ export const termsSections = [
     "Cuando corresponda, el espacio, mueble o área destinada al equipo deberá encontrarse preparado y contar con las condiciones y dimensiones adecuadas para su instalación.",
   ], after: ["Los requerimientos específicos podrán variar de acuerdo con el tipo de producto y sus especificaciones técnicas."] },
   { title: "4. Validación de la solicitud", paragraphs: ["Para gestionar el servicio, el cliente deberá completar el formulario de solicitud y proporcionar la información requerida."] },
+  { title: "5. Vigencia del beneficio", paragraphs: [PROMOTION_NOTICE,
+    "El plazo se calcula individualmente a partir de la fecha de compra indicada en el comprobante. Por ejemplo, una compra del 30 de noviembre de 2026 permite solicitar el beneficio hasta el 28 de febrero de 2027, inclusive.",
+    "La instalación se coordinará dentro de los 90 días posteriores a la compra, sujeto a disponibilidad del taller. Cuando esa disponibilidad impida atender dentro del plazo, podrá realizarse posteriormente sin perder el beneficio, siempre que la solicitud haya sido enviada a tiempo.",
+    "El envío de la solicitud no confirma automáticamente una fecha de instalación. VAWAU coordinará la visita con el cliente.",
+  ] },
 ];

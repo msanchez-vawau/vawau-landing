@@ -5,7 +5,7 @@ import { MAX_FILE_BYTES, MAX_TOTAL_BYTES } from "./installation-options";
 import { TERMS_VERSION } from "./installation-terms";
 
 type Manifest = { field: string; name: string; type: string; size: number; sha256: string; path: string; slot: number };
-type Ticket = { fields: Record<string, string>; requestToken: string; files: Manifest[]; expires: number; hash: string };
+type Ticket = { termsVersion: string; fields: Record<string, string>; requestToken: string; files: Manifest[]; expires: number; hash: string };
 export class CloudError extends Error { constructor(message: string, public status = 503) { super(message); } }
 const bucket = "installation-documents";
 const digest = (value: string | Buffer) => createHash("sha256").update(value).digest("hex");
@@ -26,6 +26,7 @@ function decode(value: unknown): Ticket {
   const [payload, signature, extra] = value.split(".");
   if (extra || !signature || !/^[a-f0-9]{64}$/.test(signature) || !timingSafeEqual(Buffer.from(sign(payload)), Buffer.from(signature))) throw new ValidationError("El envío no es válido. Reintentá desde el formulario.");
   const ticket = JSON.parse(Buffer.from(payload, "base64url").toString()) as Ticket;
+  if (ticket.termsVersion !== TERMS_VERSION) throw new ValidationError("Las condiciones se actualizaron. Recargá la página antes de enviar.");
   if (ticket.expires < Date.now()) throw new ValidationError("El tiempo para enviar venció. Volvé a solicitar el envío.");
   return ticket;
 }
@@ -44,7 +45,7 @@ export async function prepareInstallation(body: Record<string, unknown>, clientI
     form.set(key, value);
   }
   const { fields, requestToken } = validateInstallationFields(form);
-  if (!Array.isArray(body.files) || body.files.length < 2 || body.files.length > 6) throw new ValidationError("Adjuntá la etiqueta y el comprobante de compra.");
+  if (!Array.isArray(body.files) || body.files.length < 2 || body.files.length > 6) throw new ValidationError("Adjuntá la foto del modelo y número de serie y el comprobante de compra.");
   const counts: Record<string, number> = {};
   const folder = `${requestToken}/${randomUUID()}`;
   const files: Manifest[] = body.files.map((file: Record<string, unknown>) => {
@@ -55,7 +56,7 @@ export async function prepareInstallation(body: Record<string, unknown>, clientI
     if (slot > (field === "sitePhotos" ? 3 : 1)) throw new ValidationError("Revisá la cantidad de archivos adjuntos.");
     return { field, name, type, size, sha256, slot, path: `${folder}/${field}-${slot}` };
   });
-  if (!counts.labelPhoto || !counts.invoice || files.reduce((sum, f) => sum + f.size, 0) > MAX_TOTAL_BYTES) throw new ValidationError("Adjuntá la etiqueta y la factura, con un máximo total de 20 MB.");
+  if (!counts.labelPhoto || !counts.invoice || files.reduce((sum, f) => sum + f.size, 0) > MAX_TOTAL_BYTES) throw new ValidationError("Adjuntá la foto del modelo y número de serie y la factura, con un máximo total de 20 MB.");
   const quota = await cloud("/rest/v1/rpc/installation_upload_quota", { method: "POST", body: JSON.stringify({ p_key: createHmac("sha256", config().key).update(clientIp).digest("hex") }) });
   if (!quota.ok) {
     const detail = await quota.json().catch(() => ({}));
@@ -75,7 +76,7 @@ export async function prepareInstallation(body: Record<string, unknown>, clientI
     if (signedUrl.origin !== new URL(config().url).origin || !signedUrl.searchParams.has("token")) throw new CloudError("No pudimos preparar los archivos.");
     uploads.push({ url: signedUrl.href });
   }
-  return { ticket: encode({ fields, requestToken, files, hash, expires: Date.now() + 2 * 60 * 60 * 1000 }), uploads };
+  return { ticket: encode({ termsVersion: TERMS_VERSION, fields, requestToken, files, hash, expires: Date.now() + 2 * 60 * 60 * 1000 }), uploads };
 }
 export async function finishInstallation(value: unknown) {
   const ticket = decode(value);

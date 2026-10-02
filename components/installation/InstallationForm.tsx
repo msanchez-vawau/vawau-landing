@@ -5,6 +5,7 @@ import { brands, equipmentTypes, provinces, preparationOptions, MAX_FILE_BYTES, 
 import { TERMS_VERSION } from "@/lib/installation-terms";
 import Link from "next/link";
 import { getCantons, getDistricts } from "@/lib/installation-locations";
+import { PURCHASE_START, PURCHASE_END, PROMOTION_NOTICE, purchaseDateError, formatDeadline } from "@/lib/installation-promotion";
 import LocationInput from "./LocationInput";
 
 function Field({ label, name, required = false, wide = false, hint, ...props }: InputHTMLAttributes<HTMLInputElement> & { label: string; name: string; wide?: boolean; hint?: string }) {
@@ -17,10 +18,11 @@ function Group({ number, title, children }: { number: string; title: string; chi
   return <fieldset><legend><b>{number}</b>{title}</legend><div className="installation-field-grid">{children}</div></fieldset>;
 }
 function Upload({ label, name, required = false, pdf = false, multiple = false }: { label: string; name: string; required?: boolean; pdf?: boolean; multiple?: boolean }) {
-  return <Field label={label} name={name} type="file" required={required} wide multiple={multiple} accept={pdf ? "image/jpeg,image/png,image/webp,application/pdf" : "image/jpeg,image/png,image/webp"} hint={`${pdf ? "JPG, PNG, WEBP o PDF" : "JPG, PNG o WEBP"}. Máximo 5 MB por archivo.${multiple ? " Hasta 3 fotografías." : ""}`} />;
+  return <Field label={label} name={name} type="file" required={required} wide multiple={multiple} accept={pdf ? "image/jpeg,image/png,image/webp,application/pdf" : "image/jpeg,image/png,image/webp"} hint={`${name === "labelPhoto" ? "El modelo y el número de serie deben verse completos y legibles. " : ""}${pdf ? "JPG, PNG, WEBP o PDF" : "JPG, PNG o WEBP"}. Máximo 5 MB por archivo.${multiple ? " Hasta 3 fotografías." : ""}`} />;
 }
 
 export default function InstallationForm() {
+  const [purchaseDate, setPurchaseDate] = useState("");
   const [province, setProvince] = useState("");
   const [canton, setCanton] = useState("");
   const [district, setDistrict] = useState("");
@@ -39,6 +41,8 @@ export default function InstallationForm() {
     if (submitting.current) return;
     const data = new FormData(event.currentTarget);
     setError("");
+    const dateError = purchaseDateError(String(data.get("purchaseDate") ?? ""));
+    if (dateError) { setError(dateError); return; }
     const files = [...data.values()].filter((v): v is File => v instanceof File && v.size > 0);
     if (files.some(f => f.size > MAX_FILE_BYTES)) { setError("Cada archivo debe pesar como máximo 5 MB."); return; }
     if (files.reduce((s, f) => s + f.size, 0) > MAX_TOTAL_BYTES) { setError("Los archivos adjuntos no deben superar 20 MB en total."); return; }
@@ -91,8 +95,8 @@ export default function InstallationForm() {
   </section>;
 
   return <section id="solicitud" className="installation-form-layout" aria-labelledby="request-title">
-    <aside className="installation-form-intro"><p className="installation-eyebrow">TU NUEVO EQUIPO</p><h2 id="request-title" className="title">Solicitá tu instalación</h2><p>Completá los datos para que podamos validar tu compra y coordinar la visita.</p>
-      <ul className="installation-checklist"><li>Tené a mano tu factura.</li><li>Fotografiá la etiqueta del equipo.</li><li>Revisá la dirección y tu teléfono.</li></ul><p>Los campos con * son obligatorios.</p>
+    <aside className="installation-form-intro"><p className="installation-eyebrow">TU NUEVO EQUIPO</p><h2 id="request-title" className="title">Solicitá tu instalación</h2><p>Completá los datos para que podamos validar tu compra y coordinar la visita.</p><p>{PROMOTION_NOTICE}</p>
+      <ul className="installation-checklist"><li>Tené a mano tu factura.</li><li>Fotografiá el modelo y número de serie del equipo.</li><li>Revisá la dirección y tu teléfono.</li></ul><p>Los campos con * son obligatorios.</p>
     </aside>
     <form className="installation-form" onSubmit={submit} aria-busy={busy}>
       <Group number="01" title="Datos del cliente">
@@ -116,13 +120,14 @@ export default function InstallationForm() {
         <Select label="Tipo de equipo" name="equipmentType" options={equipmentTypes} onChange={setEquipment} />
         {equipment === "Otro" && <Field label="Especificá el tipo de equipo" name="otherEquipment" required wide />}
         <Field label="Modelo" name="model" required /><Field label="Número de serie" name="serial" required />
-        <Upload label="Fotografía de la etiqueta del equipo" name="labelPhoto" required />
+        <Upload label="Fotografía del modelo y número de serie del equipo" name="labelPhoto" required />
         <Upload label="Fotografía general del equipo" name="equipmentPhoto" />
       </Group>
       <Group number="04" title="Validación de compra">
         <Field label="Comercio donde adquiriste el equipo" name="store" required wide />
-        <Field label="Fecha de compra" name="purchaseDate" type="date" required />
+        <Field label="Fecha de compra" name="purchaseDate" type="date" required min={PURCHASE_START} max={PURCHASE_END} value={purchaseDate} onChange={event => setPurchaseDate(event.target.value)} hint="Compras del 15 de octubre al 30 de noviembre de 2026." />
         <Field label="Número de factura" name="invoiceNumber" />
+        {purchaseDate >= PURCHASE_START && purchaseDate <= PURCHASE_END && formatDeadline(purchaseDate) && <p className="installation-note" role="status">Podés solicitar el beneficio hasta el <strong>{formatDeadline(purchaseDate)}</strong>, inclusive (90 días después de tu compra). Si el taller no tiene disponibilidad para instalar dentro de ese plazo, conservás el beneficio al enviar la solicitud a tiempo.</p>}
         <Upload label="Factura o comprobante de compra" name="invoice" required pdf />
         <p className="installation-note">El comprobante debe ser legible y permitir identificar el comercio, el producto y la fecha de compra.</p>
       </Group>

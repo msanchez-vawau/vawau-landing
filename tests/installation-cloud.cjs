@@ -21,13 +21,19 @@ function load(filename) {
   }, module, module.exports);
   return module.exports;
 }
+// Reloj exclusivo de la prueba; no modifica el reloj de producción.
+const RealDate = Date;
+global.Date = class extends RealDate {
+  constructor(...args) { super(...(args.length ? args : ['2026-11-30T18:00:00Z'])); }
+  static now() { return new RealDate('2026-11-30T18:00:00Z').getTime(); }
+};
 process.env.SUPABASE_URL = 'https://test.invalid';
 process.env.SUPABASE_SECRET_KEY = 'test-secret-only';
 const { POST } = load(path.join(root, 'app/api/instalaciones/route.ts'));
 const { TERMS_VERSION } = load(path.join(root, 'lib/installation-terms.ts'));
 const bytes = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jq4kAAAAASUVORK5CYII=', 'base64');
 const sha256 = b => createHash('sha256').update(b).digest('hex');
-const fields = { fullName: 'Prueba', identification: '123456789', phone: '88888888', email: 'prueba@example.com', province: 'San José', canton: 'San José', district: 'Carmen', address: 'Dirección ficticia', brand: 'Electrolux', equipmentType: 'Lavadora', model: 'TEST', serial: 'TEST', store: 'Prueba', purchaseDate: '2026-01-01', onsite: 'Sí', prepared: 'Sí', source: 'qr', acceptTerms: 'on', acceptData: 'on', termsVersion: TERMS_VERSION, requestToken: randomUUID() };
+const fields = { fullName: 'Prueba', identification: '123456789', phone: '88888888', email: 'prueba@example.com', province: 'San José', canton: 'San José', district: 'Carmen', address: 'Dirección ficticia', brand: 'Electrolux', equipmentType: 'Lavadora', model: 'TEST', serial: 'TEST', store: 'Prueba', purchaseDate: '2026-11-30', onsite: 'Sí', prepared: 'Sí', source: 'qr', acceptTerms: 'on', acceptData: 'on', termsVersion: TERMS_VERSION, requestToken: randomUUID() };
 const manifest = ['labelPhoto', 'invoice'].map(field => ({ field, name: field + '.png', type: 'image/png', size: bytes.length, sha256: sha256(bytes) }));
 const stored = new Map(); const records = new Map(); let quota = true; let databaseDown = false;
 global.fetch = async (url, options = {}) => {
@@ -52,6 +58,17 @@ async function api(body, origin = 'https://landing.test') {
 async function prepare(overrides = {}) { return api({ action: 'prepare', fields, files: manifest, ...overrides }); }
 function upload(prepared, content = bytes) { for (const item of prepared.body.uploads) stored.set(new URL(item.url).pathname.split('/installation-documents/')[1], content); }
 (async () => {
+  const promotion = load(path.join(root, 'lib/installation-promotion.ts'));
+  assert.equal(promotion.installationDeadline('2026-10-15'), '2027-01-13');
+  assert.equal(promotion.installationDeadline('2026-11-30'), '2027-02-28');
+  assert.equal(promotion.installationDeadline('2026-02-30'), '');
+  assert.ok(promotion.purchaseDateError('2026-10-15', new Date('2026-10-15T05:59:59Z')));
+  assert.equal(promotion.purchaseDateError('2026-10-15', new Date('2026-10-15T06:00:00Z')), '');
+  assert.equal(promotion.purchaseDateError('2026-11-30', new Date('2027-03-01T05:59:59Z')), '');
+  assert.ok(promotion.purchaseDateError('2026-11-30', new Date('2027-03-01T06:00:00Z')));
+  for (const purchaseDate of ['2026-10-14', '2026-12-01', '2026-11-31']) assert.equal((await prepare({ fields: { ...fields, purchaseDate } })).status, 400);
+  for (const purchaseDate of ['2026-10-15', '2026-11-30']) assert.equal((await prepare({ fields: { ...fields, purchaseDate } })).status, 200);
+  assert.equal((await prepare({ fields: { ...fields, termsVersion: 'v1-2026-09-30' } })).status, 400);
   const locations = load(path.join(root, 'lib/installation-locations.ts'));
   const catalogue = require('../lib/costa-rica-locations.json');
   assert.equal(catalogue.length, 7);
