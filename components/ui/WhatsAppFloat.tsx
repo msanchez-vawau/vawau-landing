@@ -5,7 +5,14 @@ import { usePathname } from "next/navigation"
 export default function WhatsAppFloat() {
   const pathname = usePathname()
 
-  if (pathname === "/wilcor" || pathname.startsWith("/wilcor/")) {
+  const isWilcorPath =
+    pathname === "/wilcor" || pathname.startsWith("/wilcor/")
+
+  const isWilcorDomain =
+    typeof window !== "undefined" &&
+    window.location.hostname === "wilcor.vawau.com"
+
+  if (isWilcorPath || isWilcorDomain) {
     return null
   }
 
