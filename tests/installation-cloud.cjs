@@ -69,6 +69,10 @@ function upload(prepared, content = bytes) { for (const item of prepared.body.up
   for (const purchaseDate of ['2026-10-14', '2026-12-01', '2026-11-31']) assert.equal((await prepare({ fields: { ...fields, purchaseDate } })).status, 400);
   for (const purchaseDate of ['2026-10-15', '2026-11-30']) assert.equal((await prepare({ fields: { ...fields, purchaseDate } })).status, 200);
   assert.equal((await prepare({ fields: { ...fields, termsVersion: 'v1-2026-09-30' } })).status, 400);
+  const validator=load(path.join(root, 'lib/installation-validation.ts'));
+  const lowercaseForm=new FormData();for(const [key,value] of Object.entries({...fields,model:' ab-c 12 ',serial:' sr-x 99 '}))lowercaseForm.set(key,value);
+  const normalized=validator.validateInstallationFields(lowercaseForm);
+  assert.equal(normalized.fields.model,'AB-C 12');assert.equal(normalized.fields.serial,'SR-X 99');
   const locations = load(path.join(root, 'lib/installation-locations.ts'));
   const catalogue = require('../lib/costa-rica-locations.json');
   assert.equal(catalogue.length, 7);

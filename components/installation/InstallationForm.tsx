@@ -119,7 +119,7 @@ export default function InstallationForm() {
         <Select label="Marca" name="brand" options={brands} />
         <Select label="Tipo de equipo" name="equipmentType" options={equipmentTypes} onChange={setEquipment} />
         {equipment === "Otro" && <Field label="Especificá el tipo de equipo" name="otherEquipment" required wide />}
-        <Field label="Modelo" name="model" required /><Field label="Número de serie" name="serial" required />
+        <Field label="Modelo" name="model" onInput={e=>{e.currentTarget.value=e.currentTarget.value.toUpperCase();}} required /><Field label="Número de serie" name="serial" onInput={e=>{e.currentTarget.value=e.currentTarget.value.toUpperCase();}} required />
         <Upload label="Fotografía del modelo y número de serie del equipo" name="labelPhoto" required />
         <Upload label="Fotografía general del equipo" name="equipmentPhoto" />
       </Group>

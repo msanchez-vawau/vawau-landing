@@ -13,6 +13,7 @@ export function validateInstallationFields(form: FormData) {
     const value = form.get(name);
     if (value !== null && typeof value !== "string") throw new ValidationError("Revisá los datos del formulario.");
     fields[name] = (value ?? "").trim();
+    if (name === "model" || name === "serial") fields[name] = fields[name].toUpperCase();
     if (required.includes(name) && !fields[name]) throw new ValidationError("Completá todos los campos obligatorios.");
     if (fields[name].length > (["address", "observations"].includes(name) ? 2000 : 250)) throw new ValidationError("Uno de los campos supera el límite de caracteres.");
   }
