@@ -5,14 +5,19 @@ import { usePathname } from "next/navigation"
 export default function WhatsAppFloat() {
   const pathname = usePathname()
 
-  const isWilcorPath =
-    pathname === "/wilcor" || pathname.startsWith("/wilcor/")
+  const isExcludedPath =
+    pathname === "/wilcor" ||
+    pathname.startsWith("/wilcor/") ||
+    pathname === "/william" ||
+    pathname.startsWith("/william/") ||
+    pathname === "/marco" ||
+    pathname.startsWith("/marco/")
 
   const isWilcorDomain =
     typeof window !== "undefined" &&
     window.location.hostname === "wilcor.vawau.com"
 
-  if (isWilcorPath || isWilcorDomain) {
+  if (isExcludedPath || isWilcorDomain) {
     return null
   }
 
@@ -25,6 +30,7 @@ export default function WhatsAppFloat() {
       className="fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-600 text-white px-5 py-3 rounded-full shadow-2xl flex items-center gap-2 transition"
     >
       <span className="text-xl">WA</span>
+
       <span className="hidden sm:block font-semibold">
         Estamos listos para ayudarte!
       </span>
