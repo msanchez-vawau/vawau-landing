@@ -256,7 +256,7 @@ const languageLabels: Record<Language, string> = {
 }
 
 export default function GlobalProfile() {
-  const [lang, setLang] = useState<Language>("en")
+  const [lang, setLang] = useState<Language>("es")
   const t = copy[lang]
 
   useEffect(() => {
